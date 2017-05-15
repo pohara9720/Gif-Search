@@ -4,23 +4,32 @@
     background-color: #9932CC !important;
     font-family: 'Lemonada', cursive;
 }
-button{
+
+button {
     background-color: #DDA0DD;
 }
+
 img {
     height: 200px;
     width: 200px;
+    margin-right: 10px;
 }
-body{
-    background: url(https://previews.123rf.com/images/5505292/55052921405/5505292140500012/28036953-Kreative-Gl-hbirne-Idee-Konzept-Hintergrund-Design-f-r-Plakat-Flyer-Abdeckung-Brosch-re-Gesch-ftside-Lizenzfreie-Bilder.jpg);
-    background-size:100%;
 
+body {
+    background: url(https://previews.123rf.com/images/5505292/55052921405/5505292140500012/28036953-Kreative-Gl-hbirne-Idee-Konzept-Hintergrund-Design-f-r-Plakat-Flyer-Abdeckung-Brosch-re-Gesch-ftside-Lizenzfreie-Bilder.jpg);
+    background-size: 100%;
 }
-p{
+
+p {
     font-family: 'Lemonada', cursive;
     font-size: 15px;
     text-align: center;
+}
 
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    .container {
+        display: inline;
+    }
 }
 </style>
 <!DOCTYPE html>
@@ -35,14 +44,16 @@ p{
 </head>
 
 <body>
-    <div class="jumbotron">
-        <h1>GIPHY Search</h1>
-        <p>Add a topic of your choice. Click your button to search for Gifs!</p>
-        <input id="Topic" placeholder="Type Topic Here"></input>
-        <button id="addTopic">Add Topic</button>
-        <div id="buttons"></div>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>GIPHY Search</h1>
+            <p>Add a topic of your choice. Click your button to search for Gifs!</p>
+            <input id="Topic" placeholder="Type Topic Here"></input>
+            <button id="addTopic">Add Topic</button>
+            <div id="buttons"></div>
+        </div>
+        <div id="gifs"></div>
     </div>
-    <div id="gifs"></div>
     <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script type="text/javascript">
     function gif() {
@@ -75,7 +86,7 @@ p{
                         var image = $("<img class='gif'>");
                         var rating = $("<p>");
                         $(rating).html("Rated: " + response.data[i].rating);
-                        $(image).attr("src", response.data[i].images.original_still.url);
+                        $(image).attr("src", response.data[i].images.original.url);
                         $(image).attr("data-state", 'still');
                         $(image).attr("data-animate", response.data[i].images.original.url);
                         $(image).attr("data-still", response.data[i].images.original_still.url);
@@ -84,7 +95,21 @@ p{
                         $(newSet).append(gifblock);
                         $("#gifs").prepend(newSet);
                         console.log(response);
-                        // console.log(image);
+
+
+                        $(".gif").on("click", function() {
+
+                            var state = $(this).attr("data-state");
+
+                            if (state === "still") {
+
+                                $(this).attr("src", $(this).attr("data-animate"));
+                                $(this).attr("data-state", "animate");
+                            } else {
+                                $(this).attr("src", $(this).attr("data-still"));
+                                $(this).attr("data-state", "still");
+                            }
+                        });
                     }
                 });
 
@@ -92,19 +117,7 @@ p{
         });
 
     }
-    $(".gif").on("click", function() {
 
-        var state = $(this).attr("data-state");
-
-        if (state === "still") {
-
-            $(this).attr("src", $(this).attr("data-animate"));
-            $(this).attr("data-state", "animate");
-        } else {
-            $(this).attr("src", $(this).attr("data-still"));
-            $(this).attr("data-state", "still");
-        }
-    });
 
 
     gif();
@@ -112,4 +125,5 @@ p{
 </body>
 
 </html>
+
 
