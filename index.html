@@ -1,0 +1,115 @@
+<style type="text/css">
+.jumbotron {
+    text-align: center;
+    background-color: #9932CC !important;
+    font-family: 'Lemonada', cursive;
+}
+button{
+    background-color: #DDA0DD;
+}
+img {
+    height: 200px;
+    width: 200px;
+}
+body{
+    background: url(https://previews.123rf.com/images/5505292/55052921405/5505292140500012/28036953-Kreative-Gl-hbirne-Idee-Konzept-Hintergrund-Design-f-r-Plakat-Flyer-Abdeckung-Brosch-re-Gesch-ftside-Lizenzfreie-Bilder.jpg);
+    background-size:100%;
+
+}
+p{
+    font-family: 'Lemonada', cursive;
+    font-size: 15px;
+    text-align: center;
+
+}
+</style>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Gif Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Lemonada" rel="stylesheet">
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1>GIPHY Search</h1>
+        <p>Add a topic of your choice. Click your button to search for Gifs!</p>
+        <input id="Topic" placeholder="Type Topic Here"></input>
+        <button id="addTopic">Add Topic</button>
+        <div id="buttons"></div>
+    </div>
+    <div id="gifs"></div>
+    <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript">
+    function gif() {
+
+
+        $("#addTopic").on("click", function() {
+            event.preventDefault();
+            var input = $("#Topic").val();
+            $("#buttons").append("<button class='new'>" + input + "</button>")
+            console.log(input);
+
+
+            $(".new").on("click", function() {
+                console.log(this);
+                console.log(this);
+                var newSet = $("<div class='row'>");
+                $("#gifs").append(newSet);
+
+                var topic = $(this).text();
+                var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=dc6zaTOxFJmzC&limit=6";
+
+                console.log(topic);
+
+                $.ajax({
+                    url: queryURL,
+                    Method: "GET"
+                }).done(function(response) {
+                    for (i = 0; i < response.data.length; i++) {
+                        var gifblock = $("<div class='col-md-2'>");
+                        var image = $("<img class='gif'>");
+                        var rating = $("<p>");
+                        $(rating).html("Rated: " + response.data[i].rating);
+                        $(image).attr("src", response.data[i].images.original_still.url);
+                        $(image).attr("data-state", 'still');
+                        $(image).attr("data-animate", response.data[i].images.original.url);
+                        $(image).attr("data-still", response.data[i].images.original_still.url);
+                        $(gifblock).append(rating);
+                        $(gifblock).append(image);
+                        $(newSet).append(gifblock);
+                        $("#gifs").prepend(newSet);
+                        console.log(response);
+                        // console.log(image);
+                    }
+                });
+
+            });
+        });
+
+    }
+    $(".gif").on("click", function() {
+
+        var state = $(this).attr("data-state");
+
+        if (state === "still") {
+
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+        } else {
+            $(this).attr("src", $(this).attr("data-still"));
+            $(this).attr("data-state", "still");
+        }
+    });
+
+
+    gif();
+    </script>
+</body>
+
+</html>
+
