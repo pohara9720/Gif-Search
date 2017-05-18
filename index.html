@@ -29,7 +29,13 @@ p {
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     .container {
         display: inline;
+
     }
+    img{
+        height: 50px;
+        width:50px;
+    }
+
 }
 </style>
 <!DOCTYPE html>
@@ -82,7 +88,7 @@ p {
                     Method: "GET"
                 }).done(function(response) {
                     for (i = 0; i < response.data.length; i++) {
-                        var gifblock = $("<div class='col-md-2'>");
+                        var gifblock = $("<div class='col-md-2 col-xs-2'>");
                         var image = $("<img class='gif'>");
                         var rating = $("<p>");
                         $(rating).html("Rated: " + response.data[i].rating);
@@ -125,5 +131,6 @@ p {
 </body>
 
 </html>
+
 
 
